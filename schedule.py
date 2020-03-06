@@ -23,7 +23,7 @@ aram = {
         },
         "Thursday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
         "Friday": {
             "available": True,
@@ -31,7 +31,7 @@ aram = {
         },
         "Saturday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
     },
 }
@@ -42,7 +42,7 @@ penny = {
     "availability":  {
         "Monday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
         "Tuesday": {
             "available": True,
@@ -58,7 +58,7 @@ penny = {
         },
         "Friday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
         "Saturday": {
             "available": True,
@@ -77,7 +77,7 @@ chris = {
         },
         "Tuesday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
         "Wednesday": {
             "available": True,
@@ -93,7 +93,7 @@ chris = {
         },
         "Saturday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
     }
 }
@@ -123,7 +123,7 @@ print('Shifts per sensei: ', maxShifts)
 # Generate new Schedule
 newSchedule = {
     "Monday": {
-        "slot1": "test",
+        "slot1": "",
         "slot2": "",
     },
     "Tuesday": {
@@ -148,6 +148,7 @@ newSchedule = {
     },
 }
 
+print(newSchedule["Monday"]["slot1"])
 # This will be the test pass. It will go through each employees availability to see if there are any days where no one can work, or less than the required amount. If it is
 
 
@@ -164,12 +165,24 @@ for day, slot in newSchedule.items():
     for z in employees:
         for shift, y in z['availability'].items():
             employeeName = z["employeeName"]
-            # if slot1 == "":
-            # print('That slot1 is empty boi')
+            preffered = y["preffered"]
+            available = y["available"]
+            if shift == day:
+                if preffered & available:
+                    # print(employeeName, " is preffered to work on", day)
 
-            # if slot2 == "":
-            # print('That slot2 is empty boi')
+                    if slot1 == "":
+                        if slot1 != employeeName:
+                            # print('That slot1 is empty boi')
+                            slot1 = employeeName
+                            newSchedule[day]["slot1"] = slot1
 
+                    if slot2 == "":
+                        if slot1 != employeeName:
+                            if slot2 != employeeName:
+                                slot2 = employeeName
+                                newSchedule[day]["slot2"] = slot2
+print(newSchedule)
 # For the second pass, we will go through each slot again. If the slot was not filled in the priority pass, we will parse through the employees again to see if they are available.
 # This will be a recursive function. If the function goes through each slot after checking the availability of each employee and cannot fill, it will break the loop.
 
