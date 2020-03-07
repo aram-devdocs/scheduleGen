@@ -7,7 +7,9 @@
 # TEST DATA. Real data will be collected with inputs.
 aram = {
     "employeeName": "Aram",
-    "employeeID": 1,
+    "employeeID": 0,
+    "daysScheduled": 0,
+    "prefferedSpent": False,
     "availability":  {
         "Monday": {
             "available": True,
@@ -38,7 +40,9 @@ aram = {
 
 penny = {
     "employeeName": "Penny",
-    "employeeID": 2,
+    "employeeID": 1,
+    "daysScheduled": 0,
+    "prefferedSpent": False,
     "availability":  {
         "Monday": {
             "available": True,
@@ -69,11 +73,13 @@ penny = {
 
 chris = {
     "employeeName": "Chris",
-    "employeeID": 3,
+    "employeeID": 2,
+    "daysScheduled": 0,
+    "prefferedSpent": False,
     "availability":  {
         "Monday": {
             "available": True,
-            "preffered": False,
+            "preffered": True,
         },
         "Tuesday": {
             "available": True,
@@ -163,8 +169,10 @@ for day, slot in newSchedule.items():
     slot1 = slot["slot1"]
     slot2 = slot["slot2"]
     for z in employees:
+        employeeName = z["employeeName"]
+        employeeID = z["employeeID"]
+        # prefferedSpent = z["prefferedSpent"]
         for shift, y in z['availability'].items():
-            employeeName = z["employeeName"]
             preffered = y["preffered"]
             available = y["available"]
             if shift == day:
@@ -173,15 +181,25 @@ for day, slot in newSchedule.items():
 
                     if slot1 == "":
                         if slot1 != employeeName:
-                            # print('That slot1 is empty boi')
-                            slot1 = employeeName
-                            newSchedule[day]["slot1"] = slot1
+                            if employees[employeeID]["daysScheduled"] <= 2:
+                                if employees[employeeID]["prefferedSpent"] == False:
+                                    # print('That slot1 is empty boi')
+                                    slot1 = employeeName
+                                    newSchedule[day]["slot1"] = slot1
+                                    # print()
+                                    employees[employeeID]["daysScheduled"] += 1
+                                    employees[employeeID]["prefferedSpent"] = True
 
                     if slot2 == "":
                         if slot1 != employeeName:
                             if slot2 != employeeName:
-                                slot2 = employeeName
-                                newSchedule[day]["slot2"] = slot2
+                                if employees[employeeID]["daysScheduled"] <= 2:
+                                    if employees[employeeID]["prefferedSpent"] == False:
+                                        slot2 = employeeName
+                                        newSchedule[day]["slot2"] = slot2
+                                        employees[employeeID]["daysScheduled"] += 1
+                                        employees[employeeID]["prefferedSpent"] = True
+# print(employees[0]["daysScheduled"])
 print(newSchedule)
 # For the second pass, we will go through each slot again. If the slot was not filled in the priority pass, we will parse through the employees again to see if they are available.
 # This will be a recursive function. If the function goes through each slot after checking the availability of each employee and cannot fill, it will break the loop.
